@@ -8,9 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
 
 const App = () => {
   const [selected, setSelected] = useState([]); // To track selected rows
+  const [searchQuery, setSearchQuery] = useState(''); // To track search input
 
   // Define the initial data (can be fetched from an API)
   const [customers,] = useState([
@@ -23,12 +25,9 @@ const App = () => {
     { id: 7, name: "Beth Hill", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
     { id: 8, name: "Brandyn Hoeger", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
     { id: 9, name: "Rey Schuster", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
-    { id: 9, name: "jakob Aemstrong", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
-    { id: 9, name: "Janea Glover", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "Regular" },
-    { id: 9, name: "Dina Tillman", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
-
-
-
+    { id: 10, name: "Jakob Armstrong", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
+    { id: 11, name: "Janea Glover", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "Regular" },
+    { id: 12, name: "Dina Tillman", lastSeen: "08/08/2020", orders: 0, totalSpent: "$0.00", latestPurchase: "", news: true, segments: "" },
   ]);
 
   // Handle selecting a row
@@ -42,9 +41,24 @@ const App = () => {
 
   const isSelected = (id) => selected.includes(id);
 
+  // Filter customers based on the search query
+  const filteredCustomers = customers.filter(customer =>
+    customer.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="App">
       <h1>Customer Dashboard</h1>
+
+      {/* Search Input */}
+      <TextField
+        label="Search Customer"
+        variant="outlined"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      />
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -60,7 +74,7 @@ const App = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => (
+            {filteredCustomers.map((customer) => (
               <TableRow key={customer.id} selected={isSelected(customer.id)}>
                 <TableCell>
                   <Checkbox
